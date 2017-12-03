@@ -1,2 +1,4 @@
-# Algorithms_In_Swift
-This repository is created to implement algorithm using swift. The pseudo code of these algorithms are taken from "Introduction To Algorithms" book by CLRS
+# Data Structure & Algorithms, Problems
+
+This repository contains the list of Algorithms (will add more) and problems that I learned and found interesting.
+
