@@ -2,8 +2,6 @@
 
 import UIKit
 
-//var str = "Hello, playground"
-
 
 //Problem 1:
 //Interviewer: Amazon
@@ -31,146 +29,76 @@ import UIKit
  */
 
 
-class Node<T: Equatable>{
-    var value: T? = nil
-    var next: Node? = nil
+
+struct SpecialStack{
+    private var array:[Int] = [];
+    private var minElement:Int = -1;
     
-    init(value:T?,next:Node?) {
-        self.value = value
-        self.next = next
-    }
-    
-    func copy(with zone: NSZone? = nil) -> Node? {
-        let copy = Node(value: value, next: next)
-        return copy
-    }
-    
-    
-    public static func ==(lhs: Node, rhs: Node) -> Bool{
-        if (lhs.value == rhs.value && lhs.next != nil && rhs.next != nil){
-            return  lhs.value == rhs.value && lhs.next! == rhs.next!
+    mutating func push(_ e: Int){
+        if (array.count == 0){
+            minElement = e
+            array.append(e)
         }
-        else {
-            return lhs.value == rhs.value
+        else if (e <= minElement){
+            array.append(2*e-minElement)
+            minElement = e
+        }
+        else{
+           array.append(e)
         }
     }
     
+    mutating func pop() -> Int?{
+        if let last = array.last{
+            if (last < minElement){
+                minElement = 2*minElement - last
+            }
+        }
+        return array.popLast()
+    }
+    
+    func peek() -> Int?{
+        return array.last
+    }
     
     
+    func getMinElement() -> Int?{
+        return array.isEmpty ? -1 : minElement
+    }
 }
 
-class LinkedList<T: Equatable>{
-    var head:Node<T>? = nil
-    var minHead:Node<T>? = nil
-    var minLast:Node<T>? = nil
-    var last:Node<T>? = nil
+extension SpecialStack: CustomStringConvertible {
     
-    init() {
-        
-    }
-    
-    func push(value:T){
-        let newNode = Node<T>(value: value, next: nil)
-        
-        if (head == nil){
-            head = newNode
-            last = head
-            
-            //minHead = newNode
-            minLast = newNode.copy()
-           // print("Last: \(Unmanaged<AnyObject>.passUnretained(last! as AnyObject).toOpaque()) and Min Last: \(Unmanaged<AnyObject>.passUnretained(minLast!.copy() as AnyObject).toOpaque())")
-            
-            // print("Last Value is \(last!.value!)")
-            return
+    var description: String {
+        if array.count == 0 {
+            return "Stack is empty"
         }
+        let topDivider = "---Stack---\n"
+        let bottomDivider = "\n-----------\n"
         
-        /*while last?.next != nil {
-            if (last!.next!.value < minLast!.value){
-                
-            }
-            
-            last = last?.next
-            
-        }*/
+        let stackElements = array.map { "\($0)" }.reversed().joined(separator: "\n")
         
-        
-        last?.next = newNode
-        last = last?.next
-        //print("Last Value is \(last!.value!)")
-        
-        //print("1: \(self.printAll())")
-        if ((last!.value as! Int) < (minLast!.value as! Int)){
-            let minNewNode = newNode.copy()!
-            if (minNewNode == newNode){
-               // print("Yes. It's Equal")
-               // print("Last: \(Unmanaged<AnyObject>.passUnretained(minNewNode as AnyObject).toOpaque()) and Min Last: \(Unmanaged<AnyObject>.passUnretained(newNode.copy() as AnyObject).toOpaque())")
-            }
-            minLast?.next = minNewNode
-           // print("Min last value is  \(minLast!.value!) and Last Value is \(last!.value!)")
-
-            minLast = minLast?.next
-           // print("Min last value is  **** \(minLast!.value!)")
-        }
-        
-        //print("2: \(self.printAll())")
-    }
-    
-    
-    func getMinValue() -> Int{
-        if minLast != nil {
-            return (minLast!.value as! Int)
-        }
-        return -1
-    }
-    
-    func printAll(){
-        var current:Node? = head
-        var valueString:String = ""
-        while (current != nil) {
-            //valueString = add(num1: valueString, "\(current!.value!) ")
-            valueString = valueString + " \(current!.value!)"
-            current = current?.next;
-        }
-        print("Value is \(valueString)")
+        return topDivider + stackElements + bottomDivider
     }
 }
-//2 -> 9 -> 8 -> 12 -> 7 -> 10
-var linkedList = LinkedList<Int>()
-var head:Node<Int>? = nil
-//Head always point to the first
 
+var stack = SpecialStack()
+stack.push(18)
+stack.push(19)
+stack.push(29)
+stack.push(15)
+stack.push(16)
 
-linkedList.push(value: 3)
-linkedList.push(value: 5)
-linkedList.push(value: 2)
-linkedList.push(value: 4)
-linkedList.push(value: 1)
-//linkedList.push(value: 16)
-//linkedList.push(value: 17)
+print(stack.description);
+print("Min: \(stack.getMinElement()!)")
 
-//linkedList.push(value: 4)
-//linkedList.push(value: 5)
-//linkedList.push(value: 6)
-//linkedList.push(value: 7)
-//linkedList.push(value: 8)
-//linkedList.push(value: 1)
-//linkedList.push(value: 2)
-//linkedList.push(value: 3)
-//linkedList.push(value: 9)
-//linkedList.push(value: 10)
-//linkedList.push(value: 18)
-//linkedList.push(value: 19)
-//linkedList.push(value: 20)
-
-
-
-//linkedList.push(value: 6)
-linkedList.printAll()
-print("Min Value \(linkedList.getMinValue())")
-
-//var toReturn = linkedList.splitLinkedList(list: &head)
-//linkedList.printAll(head: &toReturn)
-//var node = linkedList.reverseLinkedList(list: &toReturn)
+stack.pop()
+stack.pop()
+stack.pop()
+stack.pop()
+stack.pop()
+print(stack.description);
+print("Min: \(stack.getMinElement()!)")
 
 
 
