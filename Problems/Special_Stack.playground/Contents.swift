@@ -33,25 +33,36 @@ import UIKit
 struct SpecialStack{
     private var array:[Int] = [];
     private var minElement:Int = -1;
+    private var maxElement:Int = -1;
+    
+    
     
     mutating func push(_ e: Int){
-        if (array.count == 0){
-            minElement = e
+        if (array.isEmpty){
             array.append(e)
+            minElement = e
+            maxElement = e
         }
         else if (e <= minElement){
             array.append(2*e-minElement)
             minElement = e
         }
+        else if (e >= maxElement){
+            array.append(2*e-maxElement);
+            maxElement = e
+        }
         else{
            array.append(e)
         }
     }
-    
+    //18 19 29 15 16
     mutating func pop() -> Int?{
         if let last = array.last{
             if (last < minElement){
                 minElement = 2*minElement - last
+            }
+            else{
+                maxElement = 2*maxElement - last
             }
         }
         return array.popLast()
@@ -62,8 +73,12 @@ struct SpecialStack{
     }
     
     
-    func getMinElement() -> Int?{
+    func getMinElement() -> Int{
         return array.isEmpty ? -1 : minElement
+    }
+    
+    func getMaxElement() -> Int{
+        return array.isEmpty ? -1 : maxElement
     }
 }
 
@@ -90,15 +105,14 @@ stack.push(15)
 stack.push(16)
 
 print(stack.description);
-print("Min: \(stack.getMinElement()!)")
+print("Min: \(stack.getMinElement())")
+print("Max: \(stack.getMaxElement())")
+stack.pop()
+stack.pop()
+stack.pop()
 
-stack.pop()
-stack.pop()
-stack.pop()
-stack.pop()
-stack.pop()
 print(stack.description);
-print("Min: \(stack.getMinElement()!)")
-
+print("Min: \(stack.getMinElement())")
+print("Max: \(stack.getMaxElement())")
 
 
